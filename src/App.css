@@ -1,0 +1,113 @@
+/* Общие стили для страницы */
+body, html {
+  margin: 0;
+  padding: 0;
+  background: white;
+  font-family: Arial, sans-serif;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+/* Контейнер для содержимого */
+.container {
+  width: 100%; /* Ограничиваем ширину контейнера */
+  margin: 0 auto; /* Центрируем контейнер */
+  padding: 20px; /* Добавляем отступы */
+}
+#info {
+  width: 100%;
+  color: black;
+}
+/* Стили для таблицы */
+#tablePlace {
+  width: 100%; /* Таблица занимает всю ширину контейнера */
+  overflow-x: auto; /* Добавляем горизонтальную прокрутку, если таблица слишком широкая */
+  margin-top: 20px; /* Отступ сверху */
+}
+
+/* Стили для самой таблицы */
+#tablePlace table {
+  width: 100%; /* Таблица занимает всю ширину родительского элемента */
+  border-collapse: collapse; /* Убираем двойные границы */
+  background: lightskyblue;
+  color: black;
+}
+
+/* Стили для ячеек таблицы */
+#tablePlace th, #tablePlace td {
+  padding: 12px; /* Отступы внутри ячеек */
+  text-align: left; /* Выравнивание текста по левому краю */
+  border: 1px solid #ddd; /* Границы ячеек */
+}
+
+/* Стили при наведении на строку */
+#tablePlace tr:hover {
+  background-color: lightcoral; /* Изменение фона при наведении */
+}
+
+/* Стили для модального окна */
+.modal {
+  /* Скрываем окна  */
+  display: none;
+  /*  Установаем ширину окна  */
+  height: 50%;
+  width: 100%;
+  max-width: 500px;
+  /*  Центрируем и задаем z-index */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30; /* Должен быть выше чем у подложки*/
+  /*  Побочные стили   */
+  box-shadow: 0 3px 10px -.5px rgba(0, 0, 0, .5);
+  text-align: center;
+  padding: 30px;
+  border-radius: 3px;
+  background-color: #fff;
+  transition: 0.3s all;
+}
+
+/* Стили для контента модального окна */
+.modal-content {
+  background-color: #fefefe;
+  color: black;
+  margin: auto; /* Центрируем окно */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 300px; /* Ширина окна */
+  height: 200px;
+  border-radius: 10px; /* Закруглённые углы */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Тень */
+  box-sizing: border-box;
+  position: absolute; /* Абсолютное позиционирование */
+  top: 50%; /* Сдвигаем на 50% сверху */
+  left: 50%; /* Сдвигаем на 50% слева */
+  transform: translate(-50%, -50%); /* Центрируем */
+}
+
+#modalTitle{
+  text-align: center;
+  color: black;
+}
+
+#modalBody{
+  text-align: center;
+  color: black;
+}
+
+button {
+  background: black;
+}
+
+#closeModalBtn {
+  color: black;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#closeModalBtn:hover {
+  color: #000;
+}
