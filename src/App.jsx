@@ -34,8 +34,7 @@ function App() {
     <>
         <div className="container">
             <div id="myModal" className="modal">
-                <div className="modal-context">
-                    <span id="closeModal">&times;</span>
+                <div id={"modalContext"} className="modal-context">
                     <h2 id="modalTitle"/>
                     <div id="modalBody"/>
                 </div>
