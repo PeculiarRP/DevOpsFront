@@ -1,6 +1,8 @@
 import './utils/API.js'
 import api from "./utils/API.js";
 
+import tableCreator from "./utils/TableCreator.js";
+
 function openModal(title, context) {
     let modal = document.getElementById("myModal");
     let modalTitle = document.getElementById("modalTitle");
@@ -10,6 +12,14 @@ function openModal(title, context) {
         while (modalTitle.firstChild) modalTitle.removeChild(modalTitle.firstChild);
         while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
         modal.style.display = "none";
+    }
+
+    function updateTable(data) {
+        let oldTable = document.querySelector("table");
+        if(oldTable) oldTable.remove();
+        let newTable = tableCreator(data);
+        let tablePlace = document.getElementById('tablePlace');
+        tablePlace.appendChild(newTable);
     }
 
     window.addEventListener("click", (event) => {
@@ -26,14 +36,17 @@ function openModal(title, context) {
         let del_btn = document.createElement("button");
         del_btn.textContent = title;
         del_btn.addEventListener("click", () => {
-            // api.delete("", {
-            //     data: {
-            //         user_id: context[0]
-            //     },
-            //  }).then(r => {
-            //      console.log(r.data);
-            // })
+            api.delete("", {
+                data: {
+                    // user_id: context[0]
+                    user_id: context["ID"]
+                },
+             }).then(r => {
+                console.log(r.data);
+                updateTable(r.data);
+            })
             console.log("User delete !!");
+            
             closeModal();
         })
         modalBody.appendChild(text);
@@ -59,26 +72,30 @@ function openModal(title, context) {
             text.textContent = "Изменяем пользователя под ID: " + context["ID"];
             btn.addEventListener("click", () => {
                 console.log("User update !!");
-                // api.put("",{
-                //     user_id: context["ID"],
-                //     user_name: nameInput.value,
-                //     user_surname: surnameInput.value,
-                //     user_job: jobInput.value,
-                // })
+                api.put("",{
+                    user_id: context["ID"],
+                    user_name: nameInput.value,
+                    user_surname: surnameInput.value,
+                    user_job: jobInput.value,
+                }).then(r => {
+                    console.log(r.data);
+                    updateTable(r.data);
+                })
                 closeModal();
             })
         }
         else {
             text.textContent = "Добавляем в систему нового сотрудника ()_()";
             btn.addEventListener("click", () => {
-                console.log("User delete !!");
-                // api.post("", {
-                //     user_name: nameInput.value,
-                //     user_surname: surnameInput.value,
-                //     user_job: jobInput.value,
-                // }).then(r => {
-                //     console.log(r.data);
-                // })
+                console.log("User insert !!");
+                api.post("", {
+                    user_name: nameInput.value,
+                    user_surname: surnameInput.value,
+                    user_job: jobInput.value,
+                }).then(r => {
+                    console.log(r.data);
+                    updateTable(r.data);
+                })
                 closeModal();
             })
         }

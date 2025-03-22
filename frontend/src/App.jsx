@@ -7,8 +7,8 @@ import api from "./utils/API.js";
 
 function App() {
     const  tmpList = [
-        {ID: "12", Name: "Ivan", Surname: "Ivanov", Job: "MATH"},
-        {ID: "13", Name: "Petr", Surname: "Petrov", Job: "ALGO"},
+        {ID: "1", Name: "Ivan", Surname: "Ivanov", Job: "MATH"},
+        {ID: "2", Name: "Petr", Surname: "Petrov", Job: "ALGO"},
     ];
     const [data, setData] = useState([]);
 
@@ -20,15 +20,16 @@ function App() {
         tablePlace.appendChild(newTable);
     }
 
-  const getData = async () => {
-      const req = await api.get("/");
-      setData(req.data);
-  }
+    const getData = async () => {
+        const req = await api.get("/"); 
+        // setData(req.data);
+        updateTable(req.data);
+    }
 
-  useEffect(() => {
-      getData();
-      updateTable(tmpList);
-  }, []);
+    useEffect(() => {
+        getData();
+        updateTable(data);
+    }, []);
 
   return (
     <>
@@ -40,7 +41,7 @@ function App() {
                 </div>
             </div>
             <div id="info">
-                {data}
+                { data }
             </div>
             <div id="tablePlace"/>
         </div>

@@ -1,0 +1,13 @@
+scrape_configs:
+  - job_name: 'server'
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - 'frontend:5173'
+    metrics_path: '/actuator/prometheus'
+
+  - job_name: 'rule'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['server_rule:8585']
+    metrics_path: '/actuator/prometheus'
