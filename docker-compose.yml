@@ -1,8 +1,9 @@
 services:
-  server_rule:
+  backand:
+    container_name: backand
     build: ./backand/
     command: python ./server_rule.py
-    image: server_rule:latest
+    image: backand:latest
     ports:
       - 8585:8585
     depends_on:
@@ -14,17 +15,15 @@ services:
     networks:
       iot:
         aliases:
-          - server_rule
+          - backand
   
   frontend:
+    container_name: frontend
     build: ./frontend
     command: npm run dev
     image: frontend:latest
     ports:
       - 5173:5173
-    # volumes:
-    #   - ./frontend:/frontend
-    #   - ./frontend/node_modules
     deploy:
       replicas: 1
       restart_policy:
@@ -128,8 +127,8 @@ services:
       DATA_SOURCE_USER: "postgres"
       DATA_SOURCE_PASS: "cadri"
       PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
-    volumes:
-      - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
+    # volumes:
+    #   - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
     ports:
       - "9187:9187"
     depends_on:
@@ -146,19 +145,43 @@ services:
           - postgres
 
   prometheus:
+    container_name: prometheus
     image: prom/prometheus
     ports:
       - 9090:9090
     volumes:
       - ./config:/etc/prometheus
     command:
-      - "--config.file=/etc/prometheus/prometheus.yml"
+      - --config.file=/etc/prometheus/prometheus.yml
     networks:
       iot:
         aliases:
           - prometheus
     deploy:
-      replicas: 1
+      replicas: 1  
+  
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    container_name: exporter
+    hostname: exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      iot:
+        aliases:
+          - exporter
 
   grafana:
     image: grafana/grafana
@@ -170,15 +193,15 @@ services:
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin_1
+    deploy:
+      replicas: 1  
     networks:
       iot:
         aliases:
           - grafana
-    deploy:
-      replicas: 1
+    
 
 volumes:
-  habrdb-data:
   pgadmin-data:
 
 networks:
