@@ -5,9 +5,21 @@ import collections
 import psycopg2
 from flask import Flask, request
 from flask_cors import CORS
+from prometheus_flask_exporter import PrometheusMetrics
 
 app = Flask(__name__)
 CORS(app)
+PrometheusMetrics(app)
+
+# metrics = PrometheusMetrics(app)
+# metrics.info('app_info', 'Application info', version='1.0.3')
+
+# metrics.register_default(
+#  metrics.counter(
+#  'by_path_counter', 'Request count by request paths',
+#  labels={'path': lambda: request.path}
+#  )
+# )
 
 port = 8585
 table = 'сadri'
@@ -134,4 +146,4 @@ if __name__ == '__main__':
     # Работа с БД
     isCreated_DB()
 
-    app.run(host="0.0.0.0", threaded=True, port=port, debug=True)   
+    app.run(host="0.0.0.0", threaded=True, port=port, debug=False)   
