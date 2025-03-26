@@ -1,5 +1,6 @@
 import './utils/API.js'
 import api from "./utils/API.js";
+import getData from "./App.jsx"
 
 import tableCreator from "./utils/TableCreator.js";
 
@@ -12,6 +13,7 @@ function openModal(title, context) {
         while (modalTitle.firstChild) modalTitle.removeChild(modalTitle.firstChild);
         while (modalBody.firstChild) modalBody.removeChild(modalBody.firstChild);
         modal.style.display = "none";
+        getData();
     }
 
     function updateTable(data) {

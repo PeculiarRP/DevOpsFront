@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect } from 'react'
 import './App.css'
 import './utils/TableCreator.js'
 import './utils/API.js'
@@ -6,11 +6,11 @@ import tableCreator from "./utils/TableCreator.js";
 import api from "./utils/API.js";
 
 function App() {
-    const  tmpList = [
-        {ID: "1", Name: "Ivan", Surname: "Ivanov", Job: "MATH"},
-        {ID: "2", Name: "Petr", Surname: "Petrov", Job: "ALGO"},
-    ];
-    const [data, setData] = useState([]);
+    // const  tmpList = [
+    //     {ID: "1", Name: "Ivan", Surname: "Ivanov", Job: "MATH"},
+    //     {ID: "2", Name: "Petr", Surname: "Petrov", Job: "ALGO"},
+    // ];
+    // const [data, setData] = useState([]);
 
     function updateTable(data) {
         let oldTable = document.querySelector("table");
@@ -28,7 +28,7 @@ function App() {
 
     useEffect(() => {
         getData();
-        updateTable(data);
+        // updateTable(data);
     }, []);
 
   return (
@@ -41,7 +41,7 @@ function App() {
                 </div>
             </div>
             <div id="info">
-                { data }
+                {/*{ data }*/}
             </div>
             <div id="tablePlace"/>
         </div>
