@@ -21,11 +21,11 @@ jobs:
       with:
         python-version: 3.12.1
 
-    - name: Install dependencies
+    - name: Install python
       run: |
         python -m pip install --upgrade pip
         pip install pytest
         pip install pytest-selenium
 
     - name: Tested backand
-      run: pytest back_test.py:client
+      run: pytest ./backand/back_test.py:client
