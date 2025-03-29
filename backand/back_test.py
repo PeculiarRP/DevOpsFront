@@ -3,7 +3,6 @@ from unittest.mock import patch, MagicMock
 from server_rule import app, isCreated_DB, AllEntries, Insert_DB, Update_DB, Delete_DB, jsoncreat
 import json
 
-table = 'сadri'
 
 @pytest.fixture
 def client():
@@ -87,7 +86,7 @@ def test_Delete_DB(mock_db):
     Delete_DB(1)
 
     mock_cursor.execute.assert_called_with(
-        "DELETE FROM \t{table} WHERE id = \t{1};"
+        "DELETE FROM \tсadri WHERE id = \t1;"
     )
     mock_conn.commit.assert_called_once()
 
