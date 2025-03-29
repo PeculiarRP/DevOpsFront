@@ -39,11 +39,7 @@ jobs:
       with:
         node-version: '16.14'
         registry-url: 'https://registry.npmjs.org'  
-
-    - name: NMP setup
-      run: |
-        npm install
-
+        
     - name: Tested frontend
       run: |
         cd frontend
