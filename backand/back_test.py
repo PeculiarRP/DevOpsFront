@@ -63,7 +63,7 @@ def test_Insert_DB(mock_db):
 
     mock_cursor.execute.assert_called_with(
         "INSERT INTO сadri (name, family, doljnost) VALUES (%s, %s, %s);",
-        ('Иванов', 'Иван', 'Директор')
+        ('Иван', 'Иванов', 'Директор')
     )
     mock_conn.commit.assert_called_once()
 
@@ -97,7 +97,7 @@ def test_jsoncreat():
         (2, 'Петров', 'Петр', 'Зам.Директора')
     ]
 
-    with patch('server_rule.AllEntries', return_value=test_data):
+    with patch('server_rule.AllEntries', return_value = test_data):
         result = jsoncreat()
 
         assert len(result) == 2
