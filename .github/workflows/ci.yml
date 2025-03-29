@@ -34,6 +34,12 @@ jobs:
     - name: Tested backand
       run: pytest ./backand/back_test.py
 
+    - name: Set up Node.js
+      uses: actions/setup-Node.js@v4
+      with:
+        node-version: '12.9'
+        registry-url: 'https://registry.npmjs.org'  
+
     - name: NMP setup
       run: |
         npm install
