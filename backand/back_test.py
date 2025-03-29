@@ -57,7 +57,7 @@ def test_AllEntries(mock_db):
 
 def test_Insert_DB(mock_db):
     mock_conn, mock_cursor = mock_db
-    test_data = [('Иванов', 'Иван', 'Директор')]
+    test_data = [('Иван', 'Иванов', 'Директор')]
 
     Insert_DB(test_data)
 
