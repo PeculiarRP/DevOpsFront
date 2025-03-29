@@ -28,4 +28,4 @@ jobs:
         pip install pytest-selenium
 
     - name: Tested backand
-      run: pytest ./backand/back_test.py:client
+      run: pytest ./backand/back_test.py
