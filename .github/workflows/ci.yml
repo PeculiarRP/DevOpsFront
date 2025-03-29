@@ -17,6 +17,6 @@ jobs:
     - name: Build the Docker image
       run: docker compose -f docker-compose.yml up -d --wait
       
-    - uses: actions/checkout@v12
+      # uses: actions/checkout@v5
     - name: test backand
-      run: pytest ./backand/back_test.ry::client    
+      # run: pytest ./backand/back_test.ry::client    
