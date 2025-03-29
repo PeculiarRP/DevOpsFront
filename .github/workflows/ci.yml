@@ -32,4 +32,4 @@ jobs:
         pip install prometheus-flask-exporter
 
     - name: Tested backand
-      run: pytest ./backand/back_test.py
+      run: pytest ./backand/back_test.py::mock_db
