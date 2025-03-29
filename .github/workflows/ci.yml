@@ -33,3 +33,10 @@ jobs:
 
     - name: Tested backand
       run: pytest ./backand/back_test.py
+
+    - name: NMP setup
+      run: |
+        npm install
+
+    - name: Tested frontend
+      run: npm run test
