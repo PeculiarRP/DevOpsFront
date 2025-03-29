@@ -8,6 +8,25 @@ on:
 
 jobs:
 
+  test:
+  
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker compose -f docker-compose.yml up -d --wait
+
+    - name: Setup Python
+16        uses: actions/setup-python@v2
+17        with:
+18          python-version: "3.x"
+19
+20      - name: Install pipenv
+21        run: |
+22 python -m pip install --upgrade pipenv wheel
+   
+
   build:
 
     runs-on: ubuntu-latest
