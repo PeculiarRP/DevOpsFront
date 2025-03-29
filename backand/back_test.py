@@ -62,7 +62,7 @@ def test_Insert_DB(mock_db):
     Insert_DB(test_data)
 
     mock_cursor.execute.assert_called_with(
-        "INSERT INTO сadri (name, family, doljnost) VALUES (%s, %s, %s);",
+        "INSERT INTO \tсadri (name, family, doljnost) VALUES (%s, %s, %s);",
         ('Иван', 'Иванов', 'Директор')
     )
     mock_conn.commit.assert_called_once()
@@ -74,7 +74,7 @@ def test_Update_DB(mock_db):
     Update_DB(1, 'Новое', 'Имя', 'Должность')
 
     mock_cursor.execute.assert_called_with(
-        "UPDATE сadri SET name = %s, family = %s, doljnost = %s WHERE  id = 1;",
+        "UPDATE \tсadri SET name = %s, family = %s, doljnost = %s WHERE  id = \t1;",
         ('Новое', 'Имя', 'Должность')
     )
     mock_conn.commit.assert_called_once()
