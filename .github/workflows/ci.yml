@@ -9,7 +9,6 @@ on:
 jobs:
 
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -17,6 +16,7 @@ jobs:
     - name: Build the Docker image
       run: docker compose -f docker-compose.yml up -d --wait
 
+    - name: Set up Python 3.12.1
       uses: actions/setup-python@v4
       with:
         python-version: 3.12.1
@@ -25,14 +25,4 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install pytest
-        pip install pytest-selenium  
-   
-    - name: Test with PyTest
-      run: pytest --html=tests/Reports/Report.html  
-
-    - name: Test Report Generation
-      uses: actions/upload-artifact@v4
-      if: success() || failure()
-      with:
-        name: Pytest Report           # Name of the folder
-        path: tests/Reports           # Path to test results
+        pip install pytest-selenium
