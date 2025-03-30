@@ -32,7 +32,18 @@ jobs:
         pip install prometheus-flask-exporter
 
     - name: Tested backand
-      run: pytest ./backand/back_test.py::test_isCreated_DB_table_not_exists
+      run: |
+        pytest ./backand/back_test.py::test_isCreated_DB_table_exists
+        pytest ./backand/back_test.py::test_isCreated_DB_table_not_exists
+        pytest ./backand/back_test.py::test_AllEntries
+        pytest ./backand/back_test.py::test_Insert_DB
+        pytest ./backand/back_test.py::test_Update_DB
+        pytest ./backand/back_test.py::test_Delete_DB
+        pytest ./backand/back_test.py::test_jsoncreat
+        pytest ./backand/back_test.py::test_get_endpoint
+        pytest ./backand/back_test.py::test_post_endpoint
+        pytest ./backand/back_test.py::test_put_endpoint
+        pytest ./backand/back_test.py::test_delete_endpoint
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
