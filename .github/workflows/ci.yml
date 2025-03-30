@@ -54,7 +54,7 @@ jobs:
     - name: NMP setup
       run: |
         cd frontend
-        npm install
+        npm update
 
     - name: Tested frontend
       run: |
