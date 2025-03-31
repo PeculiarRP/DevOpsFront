@@ -2,8 +2,10 @@ import React, {useEffect } from 'react'
 import './App.css'
 import './utils/TableCreator.js'
 import './utils/API.js'
+import { metrics } from "./utils/prome-proxy.js";
 import tableCreator from "./utils/TableCreator.js";
 import api from "./utils/API.js";
+
 
 function App() {
     // const  tmpList = [
@@ -28,6 +30,7 @@ function App() {
 
     useEffect(() => {
         getData();
+        metrics.pageViews.inc();
         // updateTable(data);
     }, []);
 
