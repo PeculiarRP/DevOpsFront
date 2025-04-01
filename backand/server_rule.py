@@ -3,13 +3,20 @@ import time
 import collections
 
 import psycopg2
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
+from prometheus_client import Gauge, Counter
 
 app = Flask(__name__)
 CORS(app)
 PrometheusMetrics(app)
+
+# Метрика времени загрузки страницы
+frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
+
+# Счетчик просмотров страниц (получаем с фронта)
+frontend_page_views = Counter('frontend_page_views_total', 'Frontend page views')
 
 # metrics = PrometheusMetrics(app)
 # metrics.info('app_info', 'Application info', version='1.0.3')
@@ -155,10 +162,23 @@ def put():
     return jsoncreat()
 
 
+@app.route('/metrics', methods=['POST'])
+def frontend_metrics():
+    data = request.json
+    try:
+        if "page_load_duration" in data:
+            frontend_page_load_time.set(data["page_load_duration"])
+        if "page_views_total" in data:
+            frontend_page_views.inc(data["page_views_total"])
+        return jsonify({"status": "metrics updated"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == '__main__':
     # Небольшая задержка
     # time.sleep(40)
     # Работа с БД
-    isCreated_DB()
+    # isCreated_DB()
 
     app.run(host="0.0.0.0", threaded=True, port=port, debug=False)
