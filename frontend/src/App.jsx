@@ -4,19 +4,19 @@ import './utils/TableCreator.js'
 import './utils/API.js'
 import tableCreator from "./utils/TableCreator.js";
 import api from "./utils/API.js";
-import { register, Gauge, Counter} from "prom-client";
+// import { register, Gauge, Counter} from "prom-client";
 
-const pageLoadDuration = new Gauge({
-    name: "page_load_duration_seconds",
-    help: "Page load duration in seconds",
-    registers: [register],
-})
-
-const pageViews = new Counter({
-    name: 'page_views_total',
-    help: 'Total number of page views',
-    registers: [register],
-});
+// const pageLoadDuration = new Gauge({
+//     name: "page_load_duration_seconds",
+//     help: "Page load duration in seconds",
+//     registers: [register],
+// })
+//
+// const pageViews = new Counter({
+//     name: 'page_views_total',
+//     help: 'Total number of page views',
+//     registers: [register],
+// });
 
 function App() {
     // const  tmpList = [
@@ -25,14 +25,14 @@ function App() {
     // ];
     // const [data, setData] = useState([]);
 
-    function trackPageLoadTime(){
-        const start = performance.now();
-        window.onload = () => {
-            const end = performance.now();
-            const duration = (end - start) / 1000;
-            pageLoadDuration.set(duration);
-        }
-    }
+    // function trackPageLoadTime(){
+    //     const start = performance.now();
+    //     window.onload = () => {
+    //         const end = performance.now();
+    //         const duration = (end - start) / 1000;
+    //         pageLoadDuration.set(duration);
+    //     }
+    // }
 
     function updateTable(data) {
         let oldTable = document.querySelector("table");
@@ -48,19 +48,19 @@ function App() {
         updateTable(req.data);
     }
 
-    const sendMetrics = () => {
-        setInterval(() => {
-            api.post('/metrics', {
-                page_load_duration: pageLoadDuration.get().values[0]?.value || 0,
-                page_views_total: pageViews.get().values[0]?.value || 0,
-            }).catch(error => console.error('Error sending metrics:', error));
-        }, 5000);
-    };
+    // const sendMetrics = () => {
+    //     setInterval(() => {
+    //         api.post('/metrics', {
+    //             page_load_duration: pageLoadDuration.get().values[0]?.value || 0,
+    //             page_views_total: pageViews.get().values[0]?.value || 0,
+    //         }).catch(error => console.error('Error sending metrics:', error));
+    //     }, 5000);
+    // };
 
     useEffect(() => {
-        trackPageLoadTime();
+        // trackPageLoadTime();
         getData();
-        sendMetrics();
+        // sendMetrics();
     }, []);
 
   return (

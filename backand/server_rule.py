@@ -55,9 +55,11 @@ def isCreated_DB():
     print(existtable)
     if existtable == False:
         print(f"table \t{table} not exists, creat....")
+        conn = ConnectorDB()
         cur = conn.cursor()
         cur.execute(
             f'CREATE TABLE IF NOT EXISTS \t{table} (id SERIAL PRIMARY KEY, name VARCHAR(100), family VARCHAR(100), doljnost VARCHAR(100));')
+        conn.commit()
         cur.close()
         conn.close()
         # Вставка дефолтных значений
@@ -177,8 +179,8 @@ def frontend_metrics():
 
 if __name__ == '__main__':
     # Небольшая задержка
-    # time.sleep(40)
+    time.sleep(40)
     # Работа с БД
-    # isCreated_DB()
+    isCreated_DB()
 
     app.run(host="0.0.0.0", threaded=True, port=port, debug=False)
