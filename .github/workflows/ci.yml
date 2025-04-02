@@ -104,8 +104,4 @@ jobs:
         npm run test
     
     - name: Build the Docker image
-      run: docker compose -f docker-compose.yml up -d --wait
-
-    
-
-    
+      run: docker compose -f docker-compose.yml up -d --wait    
