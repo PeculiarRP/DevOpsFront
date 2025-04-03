@@ -7,12 +7,12 @@ function tableCreator(tableData) {
     let thead = document.createElement("thead");
     let headerRow = document.createElement("tr");
 
-    let headers = ["ID", "Имя", "Фамилия", "Должность", "Добавить"]
-    let listHeader = ["ID", "Name", "Surname", "Job", "Добавить"]
+    let headers = ["ID", "Имя", "Фамилия", "Должность", "Добавить запись"]
+    let listHeader = ["ID", "Name", "Surname", "Job", "Добавить запись"]
 
     headers.forEach(header => {
         let th = document.createElement("th");
-        if (header === "Добавить") {
+        if (header === "Добавить запись") {
             let btn = document.createElement("button");
             btn.textContent = header;
             btn.addEventListener("click", () => {
