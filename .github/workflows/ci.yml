@@ -30,7 +30,7 @@ jobs:
 
     - name: Tested backand
       run: |
-        python backand/server_rule.py
+        python ../backand/server_rule.py
         pytest ./backand/back_test.py::test_isCreated_DB_table_exists
         pytest ./backand/back_test.py::test_isCreated_DB_table_not_exists
         pytest ./backand/back_test.py::test_AllEntries
