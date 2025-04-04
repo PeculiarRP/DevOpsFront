@@ -5,20 +5,14 @@ on:
     branches: [ "Lab-2" ]
   pull_request:
     branches: [ "Lab-2" ]
-  
-  stages:
-    - build
-    - test
-    
-  build job:
+
+jobs:
+
+  test:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker compose -f docker-compose.yml up -d --wait
 
-  test job:
     - name: Setup Python 3.12.1
       uses: actions/setup-python@v4
       with:
@@ -64,3 +58,12 @@ on:
         cd frontend
         npm run build --if-present        
         npm run test
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker compose -f docker-compose.yml up -d --wait
+    
