@@ -6,16 +6,20 @@ on:
   pull_request:
     branches: [ "Lab-2" ]
 
-build job:
-  runs-on: ubuntu-latest
+jobs:
+  
+  stages:
+    - build
+    - test
+    
+  test:
+    runs-on: ubuntu-latest
 
-  steps:
+    steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker compose -f docker-compose.yml up -d --wait
 
-test job:
-  steps:
     - name: Setup Python 3.12.1
       uses: actions/setup-python@v4
       with:
@@ -60,4 +64,64 @@ test job:
       run: |
         cd frontend
         npm run build --if-present        
-        npm run test  
+        npm run test
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Setup Python 3.12.1
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.12.1
+
+    - name: Update python
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        pip install pytest-selenium
+        pip install psycopg2
+        pip install flask
+        pip install flask_cors
+        pip install prometheus-flask-exporter
+
+    - name: Tested backand
+      run: |
+        pytest ./backand/back_test.py
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20.14'
+        registry-url: 'https://registry.npmjs.org' 
+
+    - name: NMP update
+      run: |
+        cd frontend
+        npm update
+
+    - name: Tested frontend
+      run: |
+        cd frontend
+        npm run build --if-present        
+        npm run test
+    
+    - name: Build the Docker image
+      run: docker compose -f docker-compose.yml up -d --wait
+
+    - name: Login Docker
+      uses: docker/login-action@v4
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+
+    - name: Import Backend
+      run: |
+        docker tag devopslab:backand.1.0.0 edenchik/devopslab:backand.1.0.0
+        docker push edenchik/devopslab:backand.1.0.0  
+
+    - name: Import Frontend
+      run: |
+        docker tag devopslab:frontend.1.0.0 edenchik/devopslab:frontend.1.0.0
+        docker push edenchik/devopslab:frontend.1.0.0
