@@ -179,7 +179,7 @@ def frontend_metrics():
 
 if __name__ == '__main__':
     # Небольшая задержка
-    time.sleep(40)
+    # time.sleep(40)
     # Работа с БД
     isCreated_DB()
 
