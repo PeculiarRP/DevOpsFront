@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [ "Lab-2" ]
 
-build jobs:
+build job:
   runs-on: ubuntu-latest
 
   steps:
@@ -14,7 +14,7 @@ build jobs:
     - name: Build the Docker image
       run: docker compose -f docker-compose.yml up -d --wait
 
-test jobs:
+test job:
   steps:
     - name: Setup Python 3.12.1
       uses: actions/setup-python@v4
