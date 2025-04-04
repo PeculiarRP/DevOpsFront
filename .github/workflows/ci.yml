@@ -67,7 +67,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
     - name: Build the Docker image
       run: docker compose -f docker-compose.yml up -d --wait
 
@@ -77,12 +76,12 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Import Backend
+    - name: Export Backend
       run: |
         docker tag devopslab:backand.1.0.0 edenchik/devopslab:backand.1.0.0
         docker push edenchik/devopslab:backand.1.0.0  
 
-    - name: Import Frontend
+    - name: Export Frontend
       run: |
         docker tag devopslab:frontend.1.0.0 edenchik/devopslab:frontend.1.0.0
         docker push edenchik/devopslab:frontend.1.0.0
