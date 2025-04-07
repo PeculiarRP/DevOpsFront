@@ -11,6 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
+*.terraform*
 
 grafana
 pgdata
@@ -26,3 +27,4 @@ queries.yaml
 *.njsproj
 *.sln
 *.sw?
+*.tfstat*
