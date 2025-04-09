@@ -86,4 +86,7 @@ jobs:
       run: |
         docker tag devopslab:frontend.1.0.0 edenchik/devopslab:frontend.1.0.0
         docker push edenchik/devopslab:frontend.1.0.0
+
+    - name: Compose YML
+      run: docker pushrm edenchik/devopslab
     
