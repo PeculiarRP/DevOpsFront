@@ -79,11 +79,11 @@ jobs:
 
     - name: Export Backend
       run: |
-        docker tag devopslab:backand.1.0.0 edenchik/devopslab:backand.1.0.0
+        docker tag edenchik/devopslab:backand.1.0.0 edenchik/devopslab:backand.1.0.0
         docker push edenchik/devopslab:backand.1.0.0  
 
     - name: Export Frontend
       run: |
-        docker tag devopslab:frontend.1.0.0 edenchik/devopslab:frontend.1.0.0
+        docker tag edenchik/devopslab:frontend.1.0.0 edenchik/devopslab:frontend.1.0.0
         docker push edenchik/devopslab:frontend.1.0.0
     

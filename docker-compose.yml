@@ -124,5 +124,4 @@ volumes:
 
 networks:
   iot:
-    driver: bridge
-    
+    driver: bridge    
