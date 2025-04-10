@@ -27,7 +27,7 @@ resource "yandex_compute_instance" "vm-1" {
   }
 
   metadata = {
-    user-data = "${file("D:/ITMO/Devops/meta.yaml")}"
+    user-data = "${file("../../meta.yaml")}"
   }
 
   scheduling_policy {
