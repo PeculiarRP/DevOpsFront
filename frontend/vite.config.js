@@ -15,7 +15,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://0.0.0.0:8585', // Адрес вашего бэкенда
+        target: 'http://backand:8585', // Адрес вашего бэкенда
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
