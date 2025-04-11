@@ -35,6 +35,7 @@ function App() {
     // }
 
     function updateTable(data) {
+        console.log(data);
         let oldTable = document.querySelector("table");
         if(oldTable) oldTable.remove();
         let newTable = tableCreator(data);
