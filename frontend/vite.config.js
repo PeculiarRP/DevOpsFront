@@ -15,10 +15,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        //target: 'http://localhost:8585/', // Адрес вашего бэкенда
-       // changeOrigin: true,
-        host: true,
-        port: 8585,
+        target: 'http://localhost:8585/', // Адрес вашего бэкенда
+        changeOrigin: true,
+        "pathRewrite": {
+              host: true
+        },
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
