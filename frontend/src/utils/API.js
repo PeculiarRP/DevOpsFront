@@ -4,6 +4,6 @@ const api = axios.create({
      baseURL: window.location.origin,
 })
 
-console.log(window.location.origin);
+console.log("current host/port : ",window.location.origin);
 
 export default api;
