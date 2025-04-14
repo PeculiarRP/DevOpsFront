@@ -1,0 +1,94 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+    kompose.version: 1.35.0 (9532ceef3)
+  labels:
+    io.kompose.service: postgres
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+        kompose.version: 1.35.0 (9532ceef3)
+      labels:
+        io.kompose.service: postgres
+    spec:
+      containers:
+        - args:
+            - postgres
+            - -c
+            - max_connections=50
+            - -c
+            - shared_buffers=1GB
+            - -c
+            - effective_cache_size=4GB
+            - -c
+            - work_mem=16MB
+            - -c
+            - maintenance_work_mem=512MB
+            - -c
+            - random_page_cost=1.1
+            - -c
+            - temp_file_limit=10GB
+            - -c
+            - log_min_duration_statement=200ms
+            - -c
+            - idle_in_transaction_session_timeout=10s
+            - -c
+            - lock_timeout=1s
+            - -c
+            - statement_timeout=60s
+            - -c
+            - shared_preload_libraries=pg_stat_statements
+            - -c
+            - pg_stat_statements.max=10000
+            - -c
+            - pg_stat_statements.track=all
+          env:
+            - name: PGDATA
+              value: :./var/lib/postgresql/data/pgdata
+            - name: POSTGRES_DB
+              value: postgres
+            - name: POSTGRES_PASSWORD
+              value: cadri
+            - name: POSTGRES_USER
+              value: postgres
+          image: postgres:17.4-alpine
+          livenessProbe:
+            exec:
+              command:
+                - pg_isready -U postgres -d cadri
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 5
+          name: postgres-container
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+          resources:
+            limits:
+              cpu: "1"
+              memory: "2147483648"
+          volumeMounts:
+            - mountPath: /docker-entrypoint-initdb.d
+              name: postgres-claim0
+            - mountPath: /var/lib/postgresql/data
+              name: postgres-cm1
+      restartPolicy: Always
+      volumes:
+        - name: postgres-claim0
+          persistentVolumeClaim:
+            claimName: postgres-claim0
+        - configMap:
+            name: postgres-cm1
+          name: postgres-cm1

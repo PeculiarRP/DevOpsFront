@@ -1,0 +1,45 @@
+apiVersion: v1
+data:
+  .dockerignore: |-
+    node_modules
+    npm-debug.log
+    build
+    .dockerignore
+    **/.git
+    **/.DS_Store
+    **/node_modules
+  .gitignore: |
+    # Logs
+    logs
+    *.log
+    npm-debug.log*
+    yarn-debug.log*
+    yarn-error.log*
+    pnpm-debug.log*
+    lerna-debug.log*
+
+    node_modules
+    dist
+    dist-ssr
+    *.local
+
+    grafana
+    pgdata
+    queries.yaml
+
+    # Editor directories and files
+    .vscode/*
+    !.vscode/extensions.json
+    .idea
+    .DS_Store
+    *.suo
+    *.ntvs*
+    *.njsproj
+    *.sln
+    *.sw?
+  docker-compose.yml: "services:\n  backand:\n    container_name: backand\n    build: ./backand/\n    command: python ./server_rule.py\n    image: edenchik/devopslab:backand.2.0.0\n    ports:\n      - 8585:8585\n    depends_on:\n      - postgres\n    deploy:\n      replicas: 1\n      restart_policy:\n        condition: on-failure\n    networks:\n      iot:\n        aliases:\n          - backand\n  \n  frontend:\n    container_name: frontend\n    build: ./frontend\n    command: npm run dev\n    image: edenchik/devopslab:frontend.2.0.0\n    ports:\n      - 5173:5173\n    deploy:\n      replicas: 1\n      restart_policy:\n        condition: unless-stopped\n    networks:\n      iot:\n        aliases:\n          - frontend\n\n  postgres:\n    container_name: postgres_container\n    image: postgres:17.4-alpine\n    command:\n      - \"postgres\"\n      - \"-c\"\n      - \"max_connections=50\"\n      - \"-c\"\n      - \"shared_buffers=1GB\"\n      - \"-c\"\n      - \"effective_cache_size=4GB\"\n      - \"-c\"\n      - \"work_mem=16MB\"\n      - \"-c\"\n      - \"maintenance_work_mem=512MB\"\n      - \"-c\"\n      - \"random_page_cost=1.1\"\n      - \"-c\"\n      - \"temp_file_limit=10GB\"\n      - \"-c\"\n      - \"log_min_duration_statement=200ms\"\n      - \"-c\"\n      - \"idle_in_transaction_session_timeout=10s\"\n      - \"-c\"\n      - \"lock_timeout=1s\"\n      - \"-c\"\n      - \"statement_timeout=60s\"\n      - \"-c\"\n      - \"shared_preload_libraries=pg_stat_statements\"\n      - \"-c\"\n      - \"pg_stat_statements.max=10000\"\n      - \"-c\"\n      - \"pg_stat_statements.track=all\"\n    environment:\n      POSTGRES_DB: \"postgres\"\n      POSTGRES_USER: \"postgres\"\n      POSTGRES_PASSWORD: \"cadri\"\n      PGDATA: \":./var/lib/postgresql/data/pgdata\"\n    volumes:\n      - ../2. Init Database:/docker-entrypoint-initdb.d\n      - .:/var/lib/postgresql/data\n    ports:\n      - \"5432:5432\"\n    healthcheck:\n      test: [\"CMD-SHELL\", \"pg_isready -U postgres -d cadri\"]\n      interval: 10s\n      timeout: 5s\n      retries: 5\n      start_period: 10s\n    restart: unless-stopped\n    deploy:\n      replicas: 1\n      resources:\n        limits:\n          cpus: '1'\n          memory: 2G\n    networks:\n      iot:\n        aliases:\n          - postgres\n\n  pgadmin:\n    container_name: pgadmin_container\n    image: dpage/pgadmin4:9.1\n    environment:\n      PGADMIN_DEFAULT_EMAIL: \"ermo30@yandex.ru\"\n      PGADMIN_DEFAULT_PASSWORD: \"cadri\"\n      PGADMIN_CONFIG_SERVER_MODE: \"False\"\n    volumes:\n      - pgadmin-data:/var/lib/pgadmin\n    ports:\n      - \"5050:80\"\n    depends_on:\n      - postgres\n    restart: unless-stopped\n    deploy:\n      replicas: 1\n      resources:\n        limits:\n          cpus: '0.5'\n          memory: 1G\n    networks:\n      iot:\n        aliases:\n          - postgres\n\n  postgres_exporter:\n    container_name: exporter_container\n    image: prometheuscommunity/postgres-exporter:v0.10.1\n    environment:\n      DATA_SOURCE_URI: \"postgres:5432/postgresql?sslmode=disable\"\n      DATA_SOURCE_USER: \"postgres\"\n      DATA_SOURCE_PASS: \"cadri\"\n      PG_EXPORTER_EXTEND_QUERY_PATH: \"/etc/postgres_exporter/queries.yaml\"\n    # volumes:\n    #   - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro\n    ports:\n      - \"9187:9187\"\n    depends_on:\n      - postgres\n    restart: unless-stopped\n    deploy:\n      resources:\n        limits:\n          cpus: '0.2'\n          memory: 500M\n    networks:\n      iot:\n        aliases:\n          - postgres\n\n  prometheus:\n    container_name: prometheus\n    image: prom/prometheus\n    ports:\n      - 9090:9090\n    volumes:\n      - ./config:/etc/prometheus\n    command:\n      - --config.file=/etc/prometheus/prometheus.yml\n    networks:\n      iot:\n        aliases:\n          - prometheus\n    deploy:\n      replicas: 1  \n  \n  node-exporter:\n    image: prom/node-exporter\n    volumes:\n      - /proc:/host/proc:ro\n      - /sys:/host/sys:ro\n      - /:/rootfs:ro\n    container_name: exporter\n    hostname: exporter\n    command:\n      - --path.procfs=/host/proc\n      - --path.sysfs=/host/sys\n      - --collector.filesystem.ignored-mount-points\n      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)\n    ports:\n      - 9100:9100\n    restart: unless-stopped\n    environment:\n      TZ: \"Europe/Moscow\"\n    networks:\n      iot:\n        aliases:\n          - exporter\n\n  grafana:\n    image: grafana/grafana\n    restart: unless-stopped\n    ports:\n      - 3000:3000\n    volumes:\n      - ./grafana:/var/lib/grafana\n    environment:\n      - GF_SECURITY_ADMIN_USER=admin\n      - GF_SECURITY_ADMIN_PASSWORD=admin_1\n    deploy:\n      replicas: 1  \n    networks:\n      iot:\n        aliases:\n          - grafana\n\nvolumes:\n  pgadmin-data:\n\nnetworks:\n  iot:\n    driver: bridge"
+kind: ConfigMap
+metadata:
+  labels:
+    io.kompose.service: postgres
+  name: postgres-cm1

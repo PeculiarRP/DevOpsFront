@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+    kompose.version: 1.35.0 (9532ceef3)
+  labels:
+    io.kompose.service: postgres-exporter
+  name: postgres-exporter
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: postgres-exporter
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: C:\ProgramData\chocolatey\lib\kubernetes-kompose\tools\kompose.exe convert
+        kompose.version: 1.35.0 (9532ceef3)
+      labels:
+        io.kompose.service: postgres-exporter
+    spec:
+      containers:
+        - env:
+            - name: DATA_SOURCE_PASS
+              value: cadri
+            - name: DATA_SOURCE_URI
+              value: postgres:5432/postgresql?sslmode=disable
+            - name: DATA_SOURCE_USER
+              value: postgres
+            - name: PG_EXPORTER_EXTEND_QUERY_PATH
+              value: /etc/postgres_exporter/queries.yaml
+          image: prometheuscommunity/postgres-exporter:v0.10.1
+          name: exporter-container
+          ports:
+            - containerPort: 9187
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: "524288e3"
+      restartPolicy: Always

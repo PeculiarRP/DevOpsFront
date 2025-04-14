@@ -40,6 +40,7 @@ function App() {
         let newTable = tableCreator(data);
         let tablePlace = document.getElementById('tablePlace');
         tablePlace.appendChild(newTable);
+        console.log(data);
     }
 
     const getData = async () => {
