@@ -14,10 +14,3 @@ spec:
       targetPort: 8585
   selector:
     io.kompose.service: backand
-  # minReplicas: 1
-  # maxReplicas: 2
-  # metrics:
-  # - type: Resource
-  #   resource:
-  #     name: cpu
-  #     targetAverageUtilization: 15

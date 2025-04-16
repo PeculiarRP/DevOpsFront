@@ -62,11 +62,16 @@ spec:
               value: cadri
             - name: POSTGRES_USER
               value: postgres
+            # - name: POSTGRES_HOST_AUTH_METHOD
+            #   value: trust
+            - name: POSTGRES_INITDB_ARGS
+              value: --auth=scram-sha-256
           image: postgres:17.4-alpine
           livenessProbe:
             exec:
               command:
-                - pg_isready -U postgres -d cadri
+                - pg_isready
+                # - pg_isready -U postgres -d cadri
             failureThreshold: 5
             initialDelaySeconds: 10
             periodSeconds: 10

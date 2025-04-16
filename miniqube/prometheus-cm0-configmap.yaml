@@ -1,6 +1,6 @@
 apiVersion: v1
 data:
-  prometheus.yml: "global:\n  scrape_interval: 5s\n\nscrape_configs:\n  - job_name: node-exporter\n    static_configs:\n      - targets: \n          - node-exporter:9100\n\n  - job_name: frontend\n    static_configs:\n      - targets: \n          - frontend:5173\n    # metrics_path: '/actuator/prometheus'\n\n  - job_name: backand\n    static_configs:\n      - targets: \n          - backand:8585\n    # metrics_path: '/actuator/prometheus'\n\n  - job_name: postgres\n    static_configs:\n      - targets: \n          - exporter_container:9187\n    # metrics_path: '/actuator/exporter_container'"
+  prometheus.yml: "global:\n  scrape_interval: 5s\n\nscrape_configs:\n  - job_name: node-exporter\n    static_configs:\n      - targets: \n          - node-exporter:9100\n\n  - job_name: frontend\n    static_configs:\n      - targets: \n          - frontend:5173\n    # metrics_path: '/actuator/prometheus'\n\n  - job_name: backand\n    static_configs:\n      - targets: \n          - backand:8585\n    # metrics_path: '/actuator/prometheus'"
 kind: ConfigMap
 metadata:
   labels:
