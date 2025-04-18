@@ -28,3 +28,4 @@ queries.yaml
 *.sln
 *.sw?
 *.tfstat*
+sonar-project-properties
