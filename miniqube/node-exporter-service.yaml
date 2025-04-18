@@ -12,5 +12,6 @@ spec:
     - name: "9100"
       port: 9100
       targetPort: 9100
+      # nodePort: 9100
   selector:
     io.kompose.service: node-exporter

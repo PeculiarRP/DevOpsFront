@@ -31,19 +31,19 @@ jobs:
         pip install flask_cors
         pip install prometheus-flask-exporter
 
-    - name: Tested backand
+    - name: Tested backend
       run: |
-        pytest ./backand/back_test.py::test_isCreated_DB_table_exists
-        pytest ./backand/back_test.py::test_isCreated_DB_table_not_exists
-        pytest ./backand/back_test.py::test_AllEntries
-        pytest ./backand/back_test.py::test_Insert_DB
-        pytest ./backand/back_test.py::test_Update_DB
-        pytest ./backand/back_test.py::test_Delete_DB
-        pytest ./backand/back_test.py::test_jsoncreat
-        pytest ./backand/back_test.py::test_get_endpoint
-        pytest ./backand/back_test.py::test_post_endpoint
-        pytest ./backand/back_test.py::test_put_endpoint
-        pytest ./backand/back_test.py::test_delete_endpoint
+        pytest ./backend/back_test.py::test_isCreated_DB_table_exists
+        pytest ./backend/back_test.py::test_isCreated_DB_table_not_exists
+        pytest ./backend/back_test.py::test_AllEntries
+        pytest ./backend/back_test.py::test_Insert_DB
+        pytest ./backend/back_test.py::test_Update_DB
+        pytest ./backend/back_test.py::test_Delete_DB
+        pytest ./backend/back_test.py::test_jsoncreat
+        pytest ./backend/back_test.py::test_get_endpoint
+        pytest ./backend/back_test.py::test_post_endpoint
+        pytest ./backend/back_test.py::test_put_endpoint
+        pytest ./backend/back_test.py::test_delete_endpoint
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
@@ -79,8 +79,8 @@ jobs:
 
     - name: Export Backend
       run: |
-        docker tag edenchik/devopslab:backand.2.0.0 edenchik/devopslab:backand.2.0.0
-        docker push edenchik/devopslab:backand.2.0.0  
+        docker tag edenchik/devopslab:backend.2.0.0 edenchik/devopslab:backend.2.0.0
+        docker push edenchik/devopslab:backend.2.0.0  
 
     - name: Export Frontend
       run: |

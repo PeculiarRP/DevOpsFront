@@ -10,6 +10,6 @@ RUN pip show prometheus-flask-exporter
 RUN pip install pytest
 RUN pip show pytest
 
-ADD server_rule.py /backand/
+ADD server_rule.py /backend/
 
-WORKDIR /backand/
+WORKDIR /backend/

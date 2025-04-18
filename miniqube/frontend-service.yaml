@@ -12,5 +12,6 @@ spec:
     - name: "5173"
       port: 5173
       targetPort: 5173
+      # nodePort: 5173
   selector:
     io.kompose.service: frontend
