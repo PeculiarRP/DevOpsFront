@@ -75,7 +75,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-          SONAR_PROJECT_KEY: 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
+          SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
       - name: Check Quality Gate status
         run: |
           if [ "${{ steps.sonarqube.outputs.qualitygate-status }}" != "OK" ]; then
