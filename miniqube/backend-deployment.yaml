@@ -24,7 +24,7 @@ spec:
         - args:
             - python
             - ./server_rule.py
-          image: edenchik/devopslab:backand.2.0.0
+          image: edenchik/devopslab:backend.2.0.0
           name: backend
           ports:
           - containerPort: 8585
