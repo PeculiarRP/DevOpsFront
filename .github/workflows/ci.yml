@@ -2,9 +2,9 @@ name: Docker Image CI
 
 on:
   push:
-    branches: [ "Lab-3" ]
+    branches: [ "Lab-4" ]
   pull_request:
-    branches: [ "Lab-3" ]
+    branches: [ "Lab-4" ]
 
 jobs:
 
@@ -62,8 +62,30 @@ jobs:
         npm run build --if-present       
         npm run test
 
-  build:
+  scane:
     needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: SonarQube Scan
+        uses: sonarsource/sonarqube-scan-action@master
+        id: sonarqube
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_PROJECT_KEY: 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
+      - name: Check Quality Gate status
+        run: |
+          if [ "${{ steps.sonarqube.outputs.qualitygate-status }}" != "OK" ]; then
+            echo "Quality Gate failed! Status: ${{ steps.sonarqube.outputs.qualitygate-status }}"
+            exit 1
+          fi
+
+
+  build:
+    needs: test, scane
     runs-on: ubuntu-latest
 
     steps:
