@@ -1,0 +1,208 @@
+services:
+  backand:
+    container_name: backend
+    build: ./backend/
+    command: python ./server_rule.py
+    image: edenchik/devopslab:backend.2.0.0
+    ports:
+      - 8585:8585
+    depends_on:
+      - postgres
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+    networks:
+      iot:
+        aliases:
+          - backend
+  
+  frontend:
+    container_name: frontend
+    build: ./frontend
+    command: npm run dev
+    image: edenchik/devopslab:frontend.2.0.0
+    ports:
+      - 5173:5173
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: unless-stopped
+    networks:
+      iot:
+        aliases:
+          - frontend
+
+  postgres:
+    container_name: postgres_container
+    image: postgres:17.4-alpine
+    command:
+      - "postgres"
+      - "-c"
+      - "max_connections=50"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=4GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=512MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "temp_file_limit=10GB"
+      - "-c"
+      - "log_min_duration_statement=200ms"
+      - "-c"
+      - "idle_in_transaction_session_timeout=10s"
+      - "-c"
+      - "lock_timeout=1s"
+      - "-c"
+      - "statement_timeout=60s"
+      - "-c"
+      - "shared_preload_libraries=pg_stat_statements"
+      - "-c"
+      - "pg_stat_statements.max=10000"
+      - "-c"
+      - "pg_stat_statements.track=all"
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "cadri"
+      PGDATA: ":./var/lib/postgresql/data/pgdata"
+    volumes:
+      - ../2. Init Database:/docker-entrypoint-initdb.d
+      - .:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d cadri"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2G
+    networks:
+      iot:
+        aliases:
+          - postgres
+
+  pgadmin:
+    container_name: pgadmin_container
+    image: dpage/pgadmin4:9.1
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "ermo30@yandex.ru"
+      PGADMIN_DEFAULT_PASSWORD: "cadri"
+      PGADMIN_CONFIG_SERVER_MODE: "False"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 1G
+    networks:
+      iot:
+        aliases:
+          - postgres
+
+  postgres_exporter:
+    container_name: exporter_container
+    image: prometheuscommunity/postgres-exporter:v0.10.1
+    environment:
+      DATA_SOURCE_URI: "postgres:5432/postgresql?sslmode=disable"
+      DATA_SOURCE_USER: "postgres"
+      DATA_SOURCE_PASS: "cadri"
+      PG_EXPORTER_EXTEND_QUERY_PATH: "/etc/postgres_exporter/queries.yaml"
+    # volumes:
+    #   - ./queries.yaml:/etc/postgres_exporter/queries.yaml:ro
+    ports:
+      - "9187:9187"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.2'
+          memory: 500M
+    networks:
+      iot:
+        aliases:
+          - postgres
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./config:/etc/prometheus
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+    networks:
+      iot:
+        aliases:
+          - prometheus
+    deploy:
+      replicas: 1  
+  
+  node-exporter:
+    image: prom/node-exporter
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    container_name: exporter
+    hostname: exporter
+    command:
+      - --path.procfs=/host/proc
+      - --path.sysfs=/host/sys
+      - --collector.filesystem.ignored-mount-points
+      - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)
+    ports:
+      - 9100:9100
+    restart: unless-stopped
+    environment:
+      TZ: "Europe/Moscow"
+    networks:
+      iot:
+        aliases:
+          - exporter
+
+  grafana:
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin_1
+    deploy:
+      replicas: 1  
+    networks:
+      iot:
+        aliases:
+          - grafana
+
+volumes:
+  pgadmin-data:
+
+networks:
+  iot:
+    driver: bridge
