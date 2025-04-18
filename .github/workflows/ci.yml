@@ -85,7 +85,7 @@ jobs:
 
 
   build:
-    needs: test, scane
+    needs: [test, scane]
     runs-on: ubuntu-latest
 
     steps:
