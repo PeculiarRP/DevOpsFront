@@ -53,12 +53,6 @@ services:
       iot:
           aliases:
             - sonarnet
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9000/api/system/health"]
-      interval: 1m
-      timeout: 30s
-      retries: 5
-      start_period: 5m
 
   postgres:
     container_name: postgres_container
