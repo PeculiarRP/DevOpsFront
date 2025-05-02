@@ -62,14 +62,26 @@ jobs:
         npm run build --if-present       
         npm run test
 
-  build:
+  docker_push:
+    name: publish
     needs: test
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
-      run: docker compose -f docker-compose.yml up -d --wait
+
+    - name: Set Docker tag
+      id: vars
+      run: echo "TAG=2.0.0" >> $GITHUB_ENV
+
+    - name: Build frontend
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:frontend.${{ env.TAG }} ./frontend
+
+    - name: Build backend
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:backend.${{ env.TAG }} ./backend
 
     - name: Login Docker
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
@@ -79,11 +91,9 @@ jobs:
 
     - name: Export Backend
       run: |
-        docker tag edenchik/devopslab:backend.2.0.0 edenchik/devopslab:backend.2.0.0
-        docker push edenchik/devopslab:backend.2.0.0  
+        docker push ${{ secrets.DOCKER_USERNAME }}/devopslab:backend.${{ env.TAG }}   
 
     - name: Export Frontend
       run: |
-        docker tag edenchik/devopslab:frontend.2.0.0 edenchik/devopslab:frontend.2.0.0
-        docker push edenchik/devopslab:frontend.2.0.0
+        docker push ${{ secrets.DOCKER_USERNAME }}/devopslab:frontend.${{ env.TAG }}
     
