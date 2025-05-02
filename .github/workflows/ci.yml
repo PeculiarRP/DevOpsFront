@@ -75,13 +75,15 @@ jobs:
       id: vars
       run: echo "TAG=2.0.0" >> $GITHUB_ENV
 
+    - name: Build backend
+      run: |
+        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:backend.${{ env.TAG }} ./backend
+
     - name: Build frontend
       run: |
         docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:frontend.${{ env.TAG }} ./frontend
 
-    - name: Build backend
-      run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:backend.${{ env.TAG }} ./backend
+    
 
     - name: Login Docker
       uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
