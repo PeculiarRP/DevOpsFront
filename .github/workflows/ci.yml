@@ -77,11 +77,11 @@ jobs:
 
     - name: Build backend
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:backend.${{ env.TAG }} ./backend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/devopslab:backend.${{ env.TAG }} ./backend
 
     - name: Build frontend
       run: |
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/devopslab:frontend.${{ env.TAG }} ./frontend
+        docker build -t ${{ secrets.DOCKER_USERNAME }}/devopslab:frontend.${{ env.TAG }} ./frontend
 
     
 
