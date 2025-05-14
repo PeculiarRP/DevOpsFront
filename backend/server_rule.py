@@ -9,7 +9,8 @@ from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client import Gauge, Counter
 import os
 
-pod_name = os.environ['POD_NAME']
+
+pod_name = os.environ.get('POD_NAME')
 
 app = Flask(__name__)
 CORS(app)
