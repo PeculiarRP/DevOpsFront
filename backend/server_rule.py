@@ -7,10 +7,13 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client import Gauge, Counter
+import os
+
+pod_name = os.environ['POD_NAME']
 
 app = Flask(__name__)
 CORS(app)
-PrometheusMetrics(app)
+PrometheusMetrics(app, pod = pod_name)
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
@@ -37,8 +40,7 @@ defaultcadri = Person("Иванов", "Иван", "Директор"), ("Пет�
 
 
 def ConnectorDB():
-    # conn = psycopg2.connect('postgresql://postgres:cadri@localhost:5432/postgres')# For Windows
-    conn = psycopg2.connect('postgresql://postgres:cadri@192.168.49.2:5432/postgres')# For kuber
+    conn = psycopg2.connect('postgresql://postgres:cadri@localhost:5432/postgres')# For Windows
     # conn = psycopg2.connect('postgresql://postgres:cadri@postgres_container:5432/postgres')
     return conn
 
