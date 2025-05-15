@@ -22,7 +22,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Test 
+      name: the test 
 
     #   run: docker compose -f docker-compose.yml up -d --wait
 
