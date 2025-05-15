@@ -14,7 +14,7 @@ pod_name = os.environ.get('POD_NAME')
 
 app = Flask(__name__)
 CORS(app)
-PrometheusMetrics(app, group_by = pod_name)
+PrometheusMetrics(app, pod = pod_name)
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
@@ -186,6 +186,7 @@ if __name__ == '__main__':
     # Небольшая задержка
     # time.sleep(40)
     # Работа с БД
+    print(f"pod \t{pod_name}")
     isCreated_DB()
 
     app.run(host="0.0.0.0", threaded=True, port=port, debug=False)
