@@ -42,7 +42,8 @@ defaultcadri = Person("Иванов", "Иван", "Директор"), ("Пет�
 
 def ConnectorDB():
     # conn = psycopg2.connect('postgresql://postgres:cadri@localhost:5432/postgres')# For Windows
-    conn = psycopg2.connect('postgresql://postgres:cadri@postgres_container:5432/postgres')
+    conn = psycopg2.connect('postgresql://postgres:cadri@192.168.49.2:5432/postgres')# For kuber
+    # conn = psycopg2.connect('postgresql://postgres:cadri@postgres_container:5432/postgres')
     return conn
 
 
