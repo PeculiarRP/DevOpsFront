@@ -14,7 +14,24 @@ pod_name = os.environ.get('POD_NAME')
 
 app = Flask(__name__)
 CORS(app)
-PrometheusMetrics(app, pod = pod_name)
+
+custom_http_request_total = Counter(
+    'flask_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
+    'Total HTTP requests to Flask',
+    ['instance', 'job', 'method', 'status', 'pod']
+)
+
+@app.after_request
+def after_request_func(response):
+    labels = {
+        'instance': 'backend:8585',
+        'job': 'backend',
+        'method': request.method,
+        'status': str(response.status_code),
+        'pod': pod_name  # Ваш тег
+    }
+    custom_http_request_total.labels(**labels).inc()
+    return response
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
