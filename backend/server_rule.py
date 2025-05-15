@@ -14,7 +14,7 @@ pod_name = os.environ.get('POD_NAME')
 
 app = Flask(__name__)
 CORS(app)
-PrometheusMetrics(app, pod = pod_name)
+PrometheusMetrics(app).info('pod', pod_name)
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
