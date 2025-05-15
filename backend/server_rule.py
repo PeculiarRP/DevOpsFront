@@ -16,10 +16,12 @@ app = Flask(__name__)
 CORS(app)
 
 custom_http_request_total = Counter(
-    'flask_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
+    'apods_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
     'Total HTTP requests to Flask',
     ['instance', 'job', 'method', 'status', 'pod']
 )
+
+PrometheusMetrics(app)
 
 @app.after_request
 def after_request_func(response):
