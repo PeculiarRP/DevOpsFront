@@ -23,34 +23,22 @@ spec:
         io.kompose.service: node-exporter
     spec:
       containers:
-        - args:
+        - name: exporter
+          image: prom/node-exporter
+          args:
             - --path.procfs=/host/proc
             - --path.sysfs=/host/sys
-            - --collector.filesystem.ignored-mount-points
-            - ^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($()|/)
-          env:
-            - name: TZ
-              value: Europe/Moscow
-          image: prom/node-exporter
-          name: exporter
-          ports:
-            - containerPort: 9100
-              protocol: TCP
           volumeMounts:
-            - mountPath: /host/proc
-              name: node-exporter-claim0
+            - name: proc
+              mountPath: /host/proc
               readOnly: true
-            - mountPath: /host/sys
-              name: node-exporter-claim1
+            - name: sys
+              mountPath: /host/sys
               readOnly: true
-      hostname: exporter
-      restartPolicy: Always
       volumes:
-        - name: node-exporter-claim0
-          persistentVolumeClaim:
-            claimName: node-exporter-claim0
-            readOnly: true
-        - name: node-exporter-claim1
-          persistentVolumeClaim:
-            claimName: node-exporter-claim1
-            readOnly: true
+        - name: proc
+          hostPath:
+            path: /proc
+        - name: sys
+          hostPath:
+            path: /sys
