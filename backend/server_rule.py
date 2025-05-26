@@ -7,10 +7,33 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client import Gauge, Counter
+import os
+
+
+pod_name = os.environ.get('POD_NAME')
 
 app = Flask(__name__)
 CORS(app)
+
+custom_http_request_total = Counter(
+    'apods_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
+    'Total HTTP requests to Flask',
+    ['instance', 'job', 'method', 'status', 'pod']
+)
+
 PrometheusMetrics(app)
+
+@app.after_request
+def after_request_func(response):
+    labels = {
+        'instance': 'backend:8585',
+        'job': 'backend',
+        'method': request.method,
+        'status': str(response.status_code),
+        'pod': pod_name  # Ваш тег
+    }
+    custom_http_request_total.labels(**labels).inc()
+    return response
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
@@ -182,6 +205,7 @@ if __name__ == '__main__':
     # Небольшая задержка
     # time.sleep(40)
     # Работа с БД
+    print(f"pod \t{pod_name}")
     isCreated_DB()
 
     app.run(host="0.0.0.0", threaded=True, port=port, debug=False)
