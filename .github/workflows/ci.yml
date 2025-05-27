@@ -85,7 +85,7 @@ jobs:
 
     - name: Set Docker tag
       id: vars
-      run: echo "TAG=3.0.0" >> $GITHUB_ENV
+      run: echo "TAG=4.0.0" >> $GITHUB_ENV
 
     - name: Build backend
       run: |
