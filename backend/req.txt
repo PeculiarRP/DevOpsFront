@@ -3,3 +3,4 @@ flask
 flask_cors
 prometheus-flask-exporter
 pytest
+pytest-cov
