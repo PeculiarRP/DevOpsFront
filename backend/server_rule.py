@@ -18,7 +18,7 @@ CORS(app)
 custom_http_request_total = Counter(
     'apods_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
     'Total HTTP requests to Flask',
-    ['instance', 'job', 'method', 'status', 'pod']
+    ['pod']
 )
 
 PrometheusMetrics(app)
@@ -26,10 +26,6 @@ PrometheusMetrics(app)
 @app.after_request
 def after_request_func(response):
     labels = {
-        'instance': 'backend:8585',
-        'job': 'backend',
-        'method': request.method,
-        'status': str(response.status_code),
         'pod': pod_name  # Ваш тег
     }
     custom_http_request_total.labels(**labels).inc()
@@ -61,7 +57,7 @@ defaultcadri = Person("Иванов", "Иван", "Директор"), ("Пет�
 
 def ConnectorDB():
     # conn = psycopg2.connect('postgresql://postgres:cadri@localhost:5432/postgres')# For Windows
-    conn = psycopg2.connect('postgresql://postgres:cadri@192.168.49.2:5432/postgres')# For kuber
+    conn = psycopg2.connect('postgresql://postgres:cadri@postgres:5432/postgres')# For kuber
     # conn = psycopg2.connect('postgresql://postgres:cadri@postgres_container:5432/postgres')
     return conn
 
