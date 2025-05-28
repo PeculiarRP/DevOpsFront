@@ -18,7 +18,7 @@ CORS(app)
 custom_http_request_total = Counter(
     'apods_http_request_total',  # Имя метрики должно совпадать, если хотите совместимость
     'Total HTTP requests to Flask',
-    ['instance', 'job', 'method', 'status', 'pod']
+    ['pod']
 )
 
 PrometheusMetrics(app)
@@ -26,10 +26,6 @@ PrometheusMetrics(app)
 @app.after_request
 def after_request_func(response):
     labels = {
-        'instance': 'backend:8585',
-        'job': 'backend',
-        'method': request.method,
-        'status': str(response.status_code),
         'pod': pod_name  # Ваш тег
     }
     custom_http_request_total.labels(**labels).inc()
