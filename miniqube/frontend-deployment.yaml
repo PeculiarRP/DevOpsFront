@@ -25,7 +25,7 @@ spec:
             - npm
             - run
             - dev
-          image: edenchik/devopslab:frontend.2.0.0
+          image: peculiarrp:devops.0.0.1
           name: frontend
           ports:
             - containerPort: 5173
