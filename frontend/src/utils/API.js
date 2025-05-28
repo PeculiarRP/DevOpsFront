@@ -6,6 +6,6 @@ const api = axios.create({
 baseURL: "http://192.168.49.2:8585",
 })
 
-console.log("current ip : http://backend:8585:8585");
+console.log("current ip : http://backend:8585");
 
 export default api;
