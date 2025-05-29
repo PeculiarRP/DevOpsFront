@@ -124,7 +124,7 @@ def Update_DB(id, name, family, doljnost):
     conn = ConnectorDB()
     cur = conn.cursor()
     cur.execute(f"UPDATE \t{table} SET name = %s, family = %s, doljnost = %s WHERE  id = \t{id};",
-                (name, family, doljnost, id))
+                (name, family, doljnost))
     update_row(id, name, family, doljnost)
     conn.commit()
     cur.close()
