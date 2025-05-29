@@ -22,7 +22,7 @@ def add_row(name, family, doljnost):
     response = requests.post(url, json=data)
 
 
-def update_row(id, name, family, doljnost, ):
+def update_row(id, name, family, doljnost):
     data = {
         'chat_id': chat_id,
         'text': f'Изменена запись по id {id} на {name} {family} {doljnost}'
