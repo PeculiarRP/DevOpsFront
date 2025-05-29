@@ -75,7 +75,7 @@ def test_Update_DB(mock_db):
 
     mock_cursor.execute.assert_called_with(
         "UPDATE \tсadri SET name = %s, family = %s, doljnost = %s WHERE  id = \t1;",
-        ('Новое', 'Имя', 'Должность')
+        (1, 'Новое', 'Имя', 'Должность')
     )
     mock_conn.commit.assert_called_once()
 
