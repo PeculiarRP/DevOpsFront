@@ -7,8 +7,8 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from prometheus_flask_exporter import PrometheusMetrics
 from prometheus_client import Gauge, Counter
+from bot_message_service import add_row, delete_row, update_row
 import os
-
 
 pod_name = os.environ.get('POD_NAME')
 
@@ -23,6 +23,7 @@ custom_http_request_total = Counter(
 
 PrometheusMetrics(app)
 
+
 @app.after_request
 def after_request_func(response):
     labels = {
@@ -30,6 +31,7 @@ def after_request_func(response):
     }
     custom_http_request_total.labels(**labels).inc()
     return response
+
 
 # Метрика времени загрузки страницы
 frontend_page_load_time = Gauge('frontend_page_load_duration_seconds', 'Frontend page load duration')
@@ -52,12 +54,12 @@ table = 'сadri'
 
 Person = collections.namedtuple("Person", ["name", "family", "doljnost"])
 defaultcadri = Person("Иванов", "Иван", "Директор"), ("Петров", "Иван", "Зам.Директора"), (
-"Сидоров", "Иван", "Зам.Зам.Директор")
+    "Сидоров", "Иван", "Зам.Зам.Директор")
 
 
 def ConnectorDB():
     # conn = psycopg2.connect('postgresql://postgres:cadri@localhost:5432/postgres')# For Windows
-    conn = psycopg2.connect('postgresql://postgres:cadri@postgres:5432/postgres')# For kuber
+    conn = psycopg2.connect('postgresql://postgres:cadri@postgres:5432/postgres')  # For kuber
     # conn = psycopg2.connect('postgresql://postgres:cadri@postgres_container:5432/postgres')
     return conn
 
@@ -110,6 +112,7 @@ def Insert_DB(datainput):
     cur = conn.cursor()
     for name, family, doljnost in datainput:
         cur.execute(f"INSERT INTO \t{table} (name, family, doljnost) VALUES (%s, %s, %s);", (name, family, doljnost))
+        add_row(name, family, doljnost)
     conn.commit()
     cur.close()
     conn.close()
@@ -121,7 +124,8 @@ def Update_DB(id, name, family, doljnost):
     conn = ConnectorDB()
     cur = conn.cursor()
     cur.execute(f"UPDATE \t{table} SET name = %s, family = %s, doljnost = %s WHERE  id = \t{id};",
-                (name, family, doljnost))
+                (id, name, family, doljnost))
+    update_row(name, family, doljnost)
     conn.commit()
     cur.close()
     conn.close()
@@ -134,6 +138,7 @@ def Delete_DB(id):
     print(f"Delete from table \t{table}")
     cur.execute(f"DELETE FROM \t{table} WHERE id = \t{id};")
     conn.commit()
+    delete_row(id)
     cur.close()
     conn.close()
 
@@ -181,6 +186,7 @@ def put():
     data = request.get_json()
     print(f"Updating of server inserting:\t{data}")
     Update_DB(data['user_id'], data['user_name'], data['user_surname'], data['user_job'])
+
     return jsoncreat()
 
 

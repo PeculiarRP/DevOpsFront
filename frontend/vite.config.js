@@ -9,7 +9,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './test/setup.js',
     coverage: {
-      provider: 'istanbul',
+      reporter: ['text', 'lcov'],
     }
   },
   server: {
