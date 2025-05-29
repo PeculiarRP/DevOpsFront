@@ -24,7 +24,7 @@ spec:
         - args:
             - python
             - ./server_rule.py
-          image: peculiarrp/devops:backend.0.0.2
+          image: peculiarrp/devops:backend.0.0.3
           name: backend
           ports:
           - containerPort: 8585
