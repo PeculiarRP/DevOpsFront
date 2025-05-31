@@ -3,7 +3,7 @@ services:
     container_name: backend
     build: ./backend/
     command: python ./server_rule.py
-    image: edenchik/devopslab:backend.2.0.0
+    image: edenchik/devopslab:backend.3.0.0
     ports:
       - 8585:8585
     depends_on:
@@ -21,9 +21,11 @@ services:
     container_name: frontend
     build: ./frontend
     command: npm run dev
-    image: edenchik/devopslab:frontend.2.0.0
+    image: edenchik/devopslab:frontend.3.0.0
     ports:
       - 5173:5173
+    depends_on:
+      - backend
     deploy:
       replicas: 1
       restart_policy:
@@ -189,7 +191,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./grafana:/var/lib/grafana
+      - grafana-data:/var/lib/grafana
     environment:
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin_1
@@ -202,6 +204,7 @@ services:
 
 volumes:
   pgadmin-data:
+  grafana-data:
 
 networks:
   iot:
