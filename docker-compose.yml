@@ -1,5 +1,5 @@
 services:
-  backand:
+  backend:
     container_name: backend
     build: ./backend/
     command: python ./server_rule.py
