@@ -21,7 +21,7 @@ services:
     container_name: frontend
     build: ./frontend
     command: npm run dev
-    image: docker pull peculiarrp/devops:frontend.0.0.6
+    image: peculiarrp/devops:frontend.0.0.6
     ports:
       - 5173:5173
     deploy:
