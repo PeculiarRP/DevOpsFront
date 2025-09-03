@@ -1,6 +1,7 @@
 import pytest
 from unittest.mock import patch, MagicMock
 from server_rule import app, isCreated_DB, AllEntries, Insert_DB, Update_DB, Delete_DB, jsoncreat
+import bot_message_service
 import json
 
 
@@ -19,6 +20,13 @@ def mock_db():
         mock_connect.return_value = mock_conn
         mock_conn.cursor.return_value = mock_cursor
         yield mock_conn, mock_cursor
+
+
+@pytest.fixture
+def mock_post():
+    with patch("bot_message_service.requests.post") as mock_post:
+        mock_post.return_value.status_code = 200
+        yield mock_post
 
 
 def test_isCreated_DB_table_exists(mock_db):
@@ -157,3 +165,35 @@ def test_delete_endpoint(client, mock_db):
         content_type='application/json'
     )
     assert response.status_code == 200
+
+def test_add_row(mock_post):
+    bot_message_service.add_row("Иван", "Иванов", "Разработчик")
+
+    mock_post.assert_called_once()
+    args, kwargs = mock_post.call_args
+    assert args[0] == bot_message_service.url
+    data = kwargs["json"]
+    assert data["chat_id"] == bot_message_service.chat_id
+    assert "Добавлена запись Иван Иванов Разработчик" in data["text"]
+
+
+def test_update_row(mock_post):
+    bot_message_service.update_row(1, "Петр", "Петров", "Дизайнер")
+
+    mock_post.assert_called_once()
+    args, kwargs = mock_post.call_args
+    assert args[0] == bot_message_service.url
+    data = kwargs["json"]
+    assert data["chat_id"] == bot_message_service.chat_id
+    assert "Изменена запись по id 1 на Петр Петров Дизайнер" in data["text"]
+
+
+def test_delete_row(mock_post):
+    bot_message_service.delete_row(11)
+
+    mock_post.assert_called_once()
+    args, kwargs = mock_post.call_args
+    assert args[0] == bot_message_service.url
+    data = kwargs["json"]
+    assert data["chat_id"] == bot_message_service.chat_id
+    assert "Удалена запись по id 11" in data["text"]
