@@ -7,7 +7,7 @@ function tableCreator(tableData) {
     let thead = document.createElement("thead");
     let headerRow = document.createElement("tr");
 
-    let headers = ["ID", "Имя", "Фамилия", "Должность", "Добавить запись"]
+    let headers = ["ID", "Имя", "Фамилия", "Ранг", "Добавить запись"]
     let listHeader = ["ID", "Name", "Surname", "Job", "Добавить запись"]
 
     headers.forEach(header => {
