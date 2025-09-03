@@ -27,6 +27,7 @@ describe('tableCreator', () => {
         expect(screen.getByText('Ранг')).toBeInTheDocument()
         expect(screen.getByText('Добавить запись')).toBeInTheDocument()
         expect(screen.getByText('Иван')).toBeInTheDocument()
+        expect(screen.getByText('Разработчик')).toBeInTheDocument()
     })
 
     it('отображает кнопки действий', () => {
