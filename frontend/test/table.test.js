@@ -24,6 +24,7 @@ describe('tableCreator', () => {
 
         expect(screen.getByText('ID')).toBeInTheDocument()
         expect(screen.getByText('Имя')).toBeInTheDocument()
+        expect(screen.getByText('Ранг')).toBeInTheDocument()
         expect(screen.getByText('Добавить запись')).toBeInTheDocument()
         expect(screen.getByText('Иван')).toBeInTheDocument()
     })
